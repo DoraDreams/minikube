@@ -26,10 +26,10 @@ import (
 const (
 	// EtcdName is the name of the extra-config component for etcd
 	EtcdName                        = "etcd"
-	DefaultListenPeerURLs           = "http://localhost:2380"
-	DefaultListenClientURLs         = "http://localhost:2379"
-	DefaultInitialAdvertisePeerURLs = "http://localhost:2380"
-	DefaultAdvertiseClientURLs      = "http://localhost:2379"
+	DefaultListenPeerURLs           = "http://0.0.0.0:2380"
+	DefaultListenClientURLs         = "http://0.0.0.0:2379"
+	DefaultInitialAdvertisePeerURLs = "http://0.0.0.0:2380"
+	DefaultAdvertiseClientURLs      = "http://0.0.0.0:2379"
 )
 
 // EtcdServer is a Server which manages an Etcd cluster

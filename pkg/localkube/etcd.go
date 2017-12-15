@@ -21,6 +21,7 @@ import (
 
 	"github.com/coreos/etcd/embed"
 	"github.com/golang/glog"
+	"fmt"
 )
 
 const (
@@ -28,8 +29,8 @@ const (
 	EtcdName                        = "etcd"
 	DefaultListenPeerURLs           = "http://0.0.0.0:2380"
 	DefaultListenClientURLs         = "http://0.0.0.0:2379"
-	DefaultInitialAdvertisePeerURLs = "http://0.0.0.0:2380"
-	DefaultAdvertiseClientURLs      = "http://0.0.0.0:2379"
+	DefaultInitialAdvertisePeerURLs = "http://127.0.0.1:2380"
+	DefaultAdvertiseClientURLs      = "http://%s:2379"
 )
 
 // EtcdServer is a Server which manages an Etcd cluster
@@ -39,14 +40,14 @@ type EtcdServer struct {
 }
 
 // NewEtcd creates a new default etcd Server using 'dataDir' for persistence. Panics if could not be configured.
-func (lk LocalkubeServer) NewEtcd(dataDir string) (*EtcdServer, error) {
+func (lk LocalkubeServer) NewEtcd(ip string, dataDir string) (*EtcdServer, error) {
 	cfg := embed.NewConfig()
 	cfg.Dir = dataDir
 
 	lpurl, _ := url.Parse(DefaultListenPeerURLs)
 	apurl, _ := url.Parse(DefaultInitialAdvertisePeerURLs)
 	lcurl, _ := url.Parse(DefaultListenClientURLs)
-	acurl, _ := url.Parse(DefaultAdvertiseClientURLs)
+	acurl, _ := url.Parse(fmt.Sprintf(DefaultAdvertiseClientURLs, ip))
 
 	cfg.LPUrls = []url.URL{*lpurl}
 	cfg.APUrls = []url.URL{*apurl}

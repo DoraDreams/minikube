@@ -107,17 +107,17 @@ func SetupServer(s *localkube.LocalkubeServer) {
 	}
 	capabilities.Initialize(c)
 
+	// setup access to etcd
+	netIP, _ := s.GetHostIP()
+	fmt.Printf("localkube host ip address: %s\n", netIP.String())
+
 	// setup etcd
-	etcd, err := s.NewEtcd(s.GetEtcdDataDirectory())
+	etcd, err := s.NewEtcd(netIP, s.GetEtcdDataDirectory())
 	if err != nil {
 		panic(err)
 	}
 	// Start etcd first
 	etcd.Start()
-
-	// setup access to etcd
-	netIP, _ := s.GetHostIP()
-	fmt.Printf("localkube host ip address: %s\n", netIP.String())
 
 	// setup apiserver
 	apiserver := s.NewAPIServer()

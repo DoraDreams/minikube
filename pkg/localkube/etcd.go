@@ -25,7 +25,11 @@ import (
 
 const (
 	// EtcdName is the name of the extra-config component for etcd
-	EtcdName = "etcd"
+	EtcdName                        = "etcd"
+	DefaultListenPeerURLs           = "http://localhost:2380"
+	DefaultListenClientURLs         = "http://localhost:2379"
+	DefaultInitialAdvertisePeerURLs = "http://localhost:2380"
+	DefaultAdvertiseClientURLs      = "http://localhost:2379"
 )
 
 // EtcdServer is a Server which manages an Etcd cluster
@@ -38,6 +42,16 @@ type EtcdServer struct {
 func (lk LocalkubeServer) NewEtcd(dataDir string) (*EtcdServer, error) {
 	cfg := embed.NewConfig()
 	cfg.Dir = dataDir
+
+	lpurl, _ := url.Parse(DefaultListenPeerURLs)
+	apurl, _ := url.Parse(DefaultInitialAdvertisePeerURLs)
+	lcurl, _ := url.Parse(DefaultListenClientURLs)
+	acurl, _ := url.Parse(DefaultAdvertiseClientURLs)
+
+	cfg.LPUrls = []url.URL{*lpurl}
+	cfg.APUrls = []url.URL{*apurl}
+	cfg.LCUrls = []url.URL{*lcurl}
+	cfg.ACUrls = []url.URL{*acurl}
 
 	lk.SetExtraConfigForComponent(EtcdName, &cfg)
 	return &EtcdServer{
